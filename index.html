@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Fortschritt Deutschland (FOD)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #050538;
+      --bg-elevated: #080845;
+      --accent: #00d0ff;
+      --accent2: #35ffb2;
+      --accent-soft: rgba(0,208,255,0.16);
+      --text: #f5f5f5;
+      --muted: #a0a6c0;
+      --border-subtle: rgba(255,255,255,0.08);
+    }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #151557 0, #020221 55%, #000015 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      backdrop-filter: blur(12px);
+      background: linear-gradient(to right, rgba(5,5,56,0.96), rgba(5,5,56,0.94));
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top:0;
+      z-index:1000;
+    }
+    .nav {
+      max-width: 1150px;
+      margin: 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 0.55rem 1.1rem;
+    }
+    .nav-left { display:flex; align-items:center; gap:0.7rem; cursor:pointer; }
+    .nav img.logo {
+      height:38px;
+      border-radius:8px;
+      box-shadow:0 0 0 1px rgba(255,255,255,0.08);
+    }
+    .nav-title {
+      font-weight:700;
+      letter-spacing:0.10em;
+      font-size:0.95rem;
+      text-transform:uppercase;
+      color:#f7f8ff;
+    }
+
+    nav {
+      display:flex;
+      align-items:center;
+      gap:0.2rem;
+    }
+    nav a {
+      color: var(--text);
+      text-decoration:none;
+      margin-left:0.2rem;
+      font-size:0.86rem;
+      padding:0.3rem 0.55rem;
+      border-radius:999px;
+      white-space:nowrap;
+      position:relative;
+      transition:background 0.18s, color 0.18s, transform 0.15s;
+    }
+    nav a::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:999px;
+      border:1px solid transparent;
+      pointer-events:none;
+    }
+    nav a:hover {
+      background: radial-gradient(circle at top left, var(--accent), var(--accent2));
+      color:#050538;
+      transform:translateY(-1px);
+    }
+    nav a.active {
+      background: rgba(0,0,0,0.35);
+    }
+    nav a.active::after {
+      border-color: rgba(0,208,255,0.65);
+    }
+
+    .burger {
+      display:none;
+      width:32px;
+      height:32px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.35);
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+    .burger-lines {
+      width:16px;
+      height:2px;
+      background:#f5f5f5;
+      position:relative;
+    }
+    .burger-lines::before,
+    .burger-lines::after {
+      content:"";
+      position:absolute;
+      left:0;
+      width:16px;
+      height:2px;
+      background:#f5f5f5;
+    }
+    .burger-lines::before { top:-5px; }
+    .burger-lines::after { top:5px; }
+
+    .mobile-nav {
+      display:none;
+      flex-direction:column;
+      gap:0.25rem;
+      padding:0.4rem 1.1rem 0.75rem;
+      max-width:1150px;
+      margin:0 auto;
+    }
+    .mobile-nav a {
+      color: var(--text);
+      text-decoration:none;
+      font-size:0.9rem;
+      padding:0.4rem 0.6rem;
+      border-radius:8px;
+      background:rgba(0,0,0,0.35);
+      border:1px solid rgba(255,255,255,0.06);
+    }
+    .mobile-nav a.active {
+      border-color:rgba(0,208,255,0.65);
+      background:rgba(0,208,255,0.12);
+    }
+
+    main {
+      max-width:1150px;
+      margin:1.7rem auto 3.2rem;
+      padding:0 1.5rem;
+    }
+
+    .hero {
+      display:grid;
+      grid-template-columns: minmax(0,3fr) minmax(0,2.2fr);
+      gap:1.7rem;
+      margin-bottom:2.1rem;
+      align-items:center;
+    }
+    .hero-main h1 {
+      font-size:2.3rem;
+      margin-bottom:0.8rem;
+      letter-spacing:0.02em;
+    }
+    .hero-main p.lead {
+      color: var(--muted);
+      font-size:0.98rem;
+      margin-bottom:1rem;
+      max-width:32rem;
+    }
+    .hero-pill {
+      display:inline-flex;
+      align-items:center;
+      gap:0.4rem;
+      padding:0.22rem 0.75rem;
+      border-radius:999px;
+      border:1px solid rgba(0,208,255,0.4);
+      background:linear-gradient(120deg,rgba(0,208,255,0.12),rgba(53,255,178,0.08));
+      font-size:0.78rem;
+      color:#dff7ff;
+      margin-bottom:0.55rem;
+      text-transform:uppercase;
+      letter-spacing:0.09em;
+    }
+    .hero-pill-dot {
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:var(--accent2);
+      box-shadow:0 0 8px rgba(53,255,178,0.9);
+    }
+    .hero-actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.55rem;
+      margin-top:0.3rem;
+    }
+    .hero-actions a {
+      display:inline-flex;
+      align-items:center;
+      gap:0.35rem;
+      padding:0.65rem 1.2rem;
+      border-radius:999px;
+      font-size:0.9rem;
+      text-decoration:none;
+      font-weight:600;
+      border:1px solid transparent;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#050538;
+      box-shadow:0 10px 30px rgba(0,0,0,0.55);
+    }
+    .btn-outline {
+      border-color:rgba(0,208,255,0.7);
+      color:var(--accent);
+      background:rgba(0,0,0,0.35);
+    }
+    .hero-visual {
+      position:relative;
+      padding:0.6rem;
+      border-radius:20px;
+      background:
+        radial-gradient(circle at 0% 0%,rgba(0,208,255,0.19),transparent 55%),
+        radial-gradient(circle at 100% 100%,rgba(53,255,178,0.17),transparent 55%),
+        linear-gradient(145deg,#020222,#06063b);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      box-shadow:0 18px 55px rgba(0,0,0,0.75);
+    }
+    .hero-visual::before {
+      content:"";
+      position:absolute;
+      inset:12%;
+      border-radius:46% 54% 40% 60%;
+      border:1px dashed rgba(0,208,255,0.35);
+      opacity:0.7;
+      filter:blur(0.2px);
+    }
+    .hero-visual img {
+      max-width:84%;
+      border-radius:14px;
+      position:relative;
+      z-index:1;
+    }
+
+    h1 { margin:0 0 0.8rem; font-size:1.8rem; }
+    h2 { margin:1.8rem 0 0.75rem; font-size:1.35rem; }
+    h3 { margin:1.2rem 0 0.45rem; font-size:1.08rem; }
+    p { margin-bottom:0.55rem; color:#d9deff; }
+    ul { margin:0.3rem 0 0.85rem 1.1rem; }
+    li { margin-bottom:0.3rem; }
+
+    section.page {
+      display:none;
+      animation: fade 0.25s ease-out;
+    }
+    section.page.active { display:block; }
+
+    @keyframes fade {
+      from { opacity:0; transform:translateY(4px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    .topic-image {
+      width:auto;
+      max-width:280px;
+      max-height:170px;
+      border-radius:10px;
+      margin:0 0 0.85rem;
+      display:block;
+      box-shadow:0 8px 22px rgba(0,0,0,0.5);
+      object-fit:cover;
+    }
+    .section-card {
+      border-radius:18px;
+      padding:1.2rem 1.35rem;
+      background:linear-gradient(145deg,rgba(8,8,69,0.96),rgba(3,3,32,0.97));
+      border:1px solid var(--border-subtle);
+      box-shadow:0 14px 40px rgba(0,0,0,0.65);
+      margin-bottom:1.6rem;
+    }
+    .section-meta {
+      font-size:0.8rem;
+      text-transform:uppercase;
+      letter-spacing:0.13em;
+      color:var(--muted);
+      margin-bottom:0.35rem;
+    }
+    .section-grid {
+      display:grid;
+      grid-template-columns:minmax(0,2.5fr) minmax(0,1.3fr);
+      gap:1.2rem;
+      align-items:flex-start;
+    }
+
+    .badge-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.45rem;
+      margin:0.4rem 0 0.8rem;
+    }
+    .badge {
+      border-radius:999px;
+      padding:0.2rem 0.6rem;
+      font-size:0.75rem;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(5,5,56,0.8);
+      color:#dfe6ff;
+    }
+
+    .stat-block {
+      margin-top:0.6rem;
+      padding:0.6rem 0.75rem;
+      border-radius:10px;
+      background:rgba(0,0,0,0.25);
+      border:1px solid rgba(255,255,255,0.06);
+      font-size:0.86rem;
+    }
+
+    footer {
+      border-top:1px solid var(--border-subtle);
+      padding:1.25rem;
+      text-align:center;
+      font-size:0.8rem;
+      color:var(--muted);
+      background:rgba(2,2,20,0.9);
+    }
+
+    .quiz-container {
+      max-width: 820px;
+      margin: 1rem 0 2.5rem;
+      background: linear-gradient(145deg,rgba(8,8,69,0.98),rgba(5,5,46,0.98));
+      padding:1.5rem 1.8rem;
+      border-radius:18px;
+      box-shadow:0 12px 40px rgba(0,0,0,0.7);
+      border:1px solid var(--border-subtle);
+    }
+    .quiz-question { margin-bottom:1.4rem; }
+    .quiz-question h3 { margin-bottom:0.35rem; }
+    .quiz-meta {
+      font-size:0.85rem;
+      color:#a0a6c0;
+      margin-bottom:0.6rem;
+    }
+    .scale-labels {
+      display:flex;
+      justify-content:space-between;
+      font-size:0.8rem;
+      color:#a0a6c0;
+      margin-bottom:0.25rem;
+    }
+    .scale-inputs {
+      display:flex;
+      justify-content:space-between;
+    }
+    .scale-inputs label {
+      flex:1;
+      text-align:center;
+      font-size:0.8rem;
+      cursor:pointer;
+    }
+    .scale-inputs input {
+      margin-bottom:0.25rem;
+    }
+    button.quiz-btn {
+      margin-top:0.6rem;
+      padding:0.6rem 1.2rem;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      background: linear-gradient(135deg,#00d0ff,#35ffb2);
+      color:#050538;
+      font-weight:600;
+      font-size:0.95rem;
+      box-shadow:0 10px 30px rgba(0,0,0,0.7);
+    }
+    #result {
+      margin-top:1.1rem;
+      padding-top:1rem;
+      border-top:1px solid rgba(255,255,255,0.12);
+    }
+    #result small {
+      display:block;
+      margin-top:0.4rem;
+      color:#a0a6c0;
+      font-size:0.8rem;
+    }
+
+    @media (max-width:900px){
+      .hero { grid-template-columns:1fr; }
+      .hero-visual { order:-1; margin-bottom:0.5rem; }
+      .section-grid { grid-template-columns:1fr; }
+      .topic-image { max-width:100%; max-height:190px; }
+    }
+    @media (max-width:750px){
+      nav { display:none; }
+      .burger { display:flex; }
+      .mobile-nav { display:flex; }
+      main { padding:0 1rem; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="nav-left" id="logo-link">
+      <img src="F-2.jpg" alt="FOD Logo" class="logo">
+      <div class="nav-title">Fortschritt Deutschland</div>
+    </div>
+    <nav id="main-nav">
+      <a href="#start" data-page="start" class="active">Start</a>
+      <a href="#leitbild" data-page="leitbild">Leitbild</a>
+      <a href="#migration" data-page="migration">Migration</a>
+      <a href="#wirtschaft" data-page="wirtschaft">Wirtschaft</a>
+      <a href="#sozial" data-page="sozial">Soziales & Rente</a>
+      <a href="#klima" data-page="klima">Klima & Energie</a>
+      <a href="#sicherheit" data-page="sicherheit">Sicherheit</a>
+      <a href="#aussen" data-page="aussen">Außenpolitik</a>
+      <a href="#bildung" data-page="bildung">Bildung & Digitales</a>
+      <a href="#quiz" data-page="quiz">FOD‑Check</a>
+    </nav>
+    <div class="burger" id="burger">
+      <div class="burger-lines"></div>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="#start" data-page="start" class="active">Start</a>
+    <a href="#leitbild" data-page="leitbild">Leitbild</a>
+    <a href="#migration" data-page="migration">Migration</a>
+    <a href="#wirtschaft" data-page="wirtschaft">Wirtschaft</a>
+    <a href="#sozial" data-page="sozial">Soziales & Rente</a>
+    <a href="#klima" data-page="klima">Klima & Energie</a>
+    <a href="#sicherheit" data-page="sicherheit">Sicherheit</a>
+    <a href="#aussen" data-page="aussen">Außenpolitik</a>
+    <a href="#bildung" data-page="bildung">Bildung & Digitales</a>
+    <a href="#quiz" data-page="quiz">FOD‑Check</a>
+  </div>
+</header>
+
+<main>
+  <!-- START -->
+  <section id="page-start" class="page active">
+    <div class="hero">
+      <div class="hero-main">
+        <div class="hero-pill">
+          <span class="hero-pill-dot"></span>
+          Evidenzbasiertes Zukunftsprogramm
+        </div>
+        <h1>Realpolitik für eine sichere Zukunft</h1>
+        <p class="lead">
+          Die FOD verbindet Ordnung, wirtschaftliche Stärke, soziale Sicherheit und europäische Verantwortung –
+          auf Basis von Studien u.a. von DIW, IW, IMK, BVR und Statistischem Bundesamt.
+        </p>
+        <div class="badge-row">
+          <span class="badge">Sicheres Deutschland</span>
+          <span class="badge">Starke Industrie</span>
+          <span class="badge">Demografiefeste Rente</span>
+          <span class="badge">Klima mit Vernunft</span>
+        </div>
+        <div class="hero-actions">
+          <a href="#leitbild" data-page="leitbild" class="btn-primary nav-link">Programm lesen</a>
+          <a href="#quiz" data-page="quiz" class="btn-outline nav-link">Passe ich zur FOD?</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="F-2.jpg" alt="FOD Logo Visual">
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-meta">Überblick</div>
+      <div class="section-grid">
+        <div>
+          <h2>Worauf die FOD reagiert</h2>
+          <ul>
+            <li>unkontrolierte Zuwanderung
+	    <li>stagnierende deutsche Wirtschaft</li>
+	    <li>veränderungen im Arbeitsmarkt
+            <li>die soziale Spaltung und ungerechte verteilung von Geldern
+	    <li>den Demografischer Wandel
+	    <li>den fortschreitenden Klimawandel
+	    <li>Deutschlands abfallende golbale Stellung
+            <li>veraltete Bildungsmethoden</li>
+            <li>hohe Bürokratie
+          </ul>
+          <div class="stat-block">
+            <strong>Strategischer Ansatz:</strong> strenge Kontrolle irregulärer Migration + aktive
+            Fachkräftezuwanderung, hohe Zukunftsinvestitionen, technologieoffene Klimapolitik und ein starkes Europa
+          </div>
+        </div>
+        <div>
+          <img src="start.jpg" alt="Symbolbild Startseite FOD" class="topic-image">
+          <p style="font-size:0.8rem;color:var(--muted);">
+            Neue Volkspartei mit Potenzial für studien- und technologiebasierte Veränderungen.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEITBILD -->
+  <section id="page-leitbild" class="page">
+    <div class="section-card">
+      <div class="section-meta">Leitbild & Ausgangslage</div>
+      <div class="section-grid">
+        <div>
+          <h1>Gesellschaftliche Ausgangslage</h1>
+          <h3>Problemwahrnehmung der Bürger</h3>
+          <ul>
+            <li>37&nbsp;% nennen Zuwanderung/Flucht, 28&nbsp;% die Wirtschaft, 18&nbsp;% soziale Ungleichheit, 14&nbsp;% Umwelt/Klima als wichtigste Probleme.</li>
+            <li>69&nbsp;% sehen Deutschlands wirtschaftliche Stellung als unsicher, 72&nbsp;% die gesellschaftliche Stabilität.</li>
+            <li>78&nbsp;% halten die NATO durch die US‑Administration für gefährdet; nur etwa jeder Siebte erwartet 2026 ein Ende des Ukraine‑Kriegs.</li>
+          </ul>
+          <h3>Demografie & Fachkräfte</h3>
+          <ul>
+            <li>Bis 2035 ist voraussichtlich jeder vierte Einwohner mindestens 67 Jahre alt (heute etwa jeder Fünfte).</li>
+            <li>DIW: inländisches Erwerbspersonenpotenzial sinkt zwischen 2025 und 2029 um ca. 300&nbsp;000 Personen pro Jahr.</li>
+            <li>BVR/IW: die Bevölkerung steig bis 2035 nur leicht auf rund 84 Mio., langfristiger abfall auf etwa 75 Mio. bis 2070 bei moderater Entwicklung.</li>
+          </ul>
+        </div>
+        <div>
+          <img src="leitbild.jpg" alt="Symbolbild Leitbild" class="topic-image">
+          <div class="stat-block">
+            Menschen mit Einwanderungsgeschichte stellen rund 12&nbsp;% der Wahlberechtigten; sie sind
+            mehrheitlich demokratieoffen, aber parteipolitisch volatil.
+          </div>
+        </div>
+      </div>
+
+      <h2>Leitbild der FOD – sechs Säulen</h2>
+
+      <h3>1. Sicheres Deutschland</h3>
+      <ul>
+        <li>Rechtsstaat, Kontrolle der Grenzen, konsequente Bekämpfung organisierter Kriminalität und Extremismus.</li>
+        <li>Stärkerer Ausbau von Polizei, Justiz und Cyber‑Sicherheit.</li>
+      </ul>
+
+      <h3>2. Wirtschafts- und Industrienation</h3>
+      <ul>
+        <li>Erhalt und Modernisierung des industriellen Kerns durch aktive Industrie‑ und Standortpolitik. </li>
+        <li>Hohe Investitionen in Infrastruktur, Bildung, Digitalisierung und Dekarbonisierung. </li>
+      </ul>
+
+      <h3>3. Demografiefeste Sozialsysteme</h3>
+      <ul>
+        <li>Rente, Pflege, Gesundheit langfristig stabil und generationengerecht. </li>
+        <li>Starke Arbeitsanreize, mehr Erwerbstätigkeit von Frauen und Älteren. </li>
+	<li>Stabile Rente durch konservative Wertpapierfonds. </li>
+      </ul>
+
+      <h3>4. Klima- und Energiepolitik mit Vernunft</h3>
+      <ul>
+        <li>Technologieoffenheit ausbau erneuerbarer Energien inkl. neuer Kernenergie‑Konzepte (SMR). </li>
+        <li>Soziale Abfederung (Klimadividende) und Schutz der Industrie. </li>
+      </ul>
+
+      <h3>5. Bildung & Aufstieg</h3>
+      <ul>
+        <li>Exzellente frühe Bildung, starke berufliche Bildung, gezielte Weiterbildung. </li>
+        <li>Antwort auf Digitalisierung, KI und Klimawandel über lebenslanges Lernen. </li>
+      </ul>
+
+      <h3>6. Europäische Verantwortung</h3>
+      <ul>
+        <li>Deutschland als verlässlicher NATO‑ und EU‑Partner mit strategischer Eigenständigkeit. </li>
+        <li>De‑Risking gegenüber China und Russland, Stärkung europäischer Souveränität. </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- MIGRATION -->
+  <section id="page-migration" class="page">
+    <div class="section-card">
+      <div class="section-meta">Migration & Integration</div>
+      <div class="section-grid">
+        <div>
+          <h1>Migration & Integrationspolitik</h1>
+          <h3>Ausgangslage</h3>
+          <ul>
+            <li>Rund ein Viertel der Bevölkerung sieht Migration als eines der wichtigsten politischen Probleme. </li>
+            <li>DIW: In vier Jahren sollen mindestens 1,6&nbsp;Mio. ausländische Personen zusätzlich in gute Arbeit gebracht werden. </li>
+            <li>Geflüchtete Männer: Erwerbsquote nach 8 Jahren ca. 86&nbsp;%, geflüchtete Frauen nur etwa 33&nbsp;%. </li>
+          </ul>
+        </div>
+        <div>
+          <img src="migration.jpg" alt="Symbolbild Migration und Integration" class="topic-image">
+          <div class="stat-block">
+            Zielkonflikt: Reduktion irregulärer Migration, aber mehr gesteuerte Fachkräfteeinwanderung
+            zur Sicherung von Wachstum und Sozialsystemen. 
+          </div>
+        </div>
+      </div>
+
+      <h2>Leitprinzipien der Migrationspolitik</h2>
+      <h3>1. Kontrolle & Ordnung</h3>
+      <ul>
+        <li>Reduktion irregulärer Migration, konsequente Rückführung abgelehnter Asylbewerber und Straftäter. </li>
+      </ul>
+
+      <h3>2. Offene Türen für Fachkräfte</h3>
+      <ul>
+        <li>Massive Erleichterung qualifizierter Arbeitsmigration in Engpassberufe (Pflege, Handwerk, IT, Industrie). </li>
+      </ul>
+
+      <h3>3. Integration als Bringschuld und Angebot</h3>
+      <ul>
+        <li>Aufenthaltsperspektiven werden an Sprache, Arbeit und gesellschaftliche Teilhabe gebunden. </li>
+      </ul>
+
+      <h2>Konkrete Maßnahmen</h2>
+      <h3>1. EU-Außengrenzschutz & externe Asylverfahren</h3>
+      <ul>
+        <li>Frontex‑Ausbau auf dauerhaft mind. 10&nbsp;000 Grenzschutzbeamte bis 2030. </li>
+        <li>EU‑Asylzentren in sicheren Drittstaaten; Ziel: 70&nbsp;% der Asylprüfungen binnen 5 Jahren dorthin verlagern. </li>
+      </ul>
+
+      <h3>2. Rückführungsoffensive</h3>
+      <ul>
+        <li>Rückführungsabkommen mit Herkunftsstaaten, verknüpft mit Visa‑ und Entwicklungspolitik. </li>
+        <li>Jährlicher „Rückführungsbericht“ mit Zahlen zu Ausreisen, Rückführungen und verhinderten Straftaten. </li>
+      </ul>
+
+      <h3>3. Turbo-Fachkräfteeinwanderung</h3>
+      <ul>
+        <li>Umsetzung des DIW‑Ziels: +1,6&nbsp;Mio. ausländische Fachkräfte in vier Jahren. </li>
+        <li>Voll digitales Portal „Work‑in‑Germany‑Cloud“ (Abschlussanerkennung, Kompetenz‑Checks, Job‑Matching). </li>
+        <li>Ziel: Deutschland im OECD‑Ranking zur Zuwanderungsattraktivität von Rang 15 in die Top‑10. </li>
+      </ul>
+
+      <h3>4. Verbindliche Integrationspfade</h3>
+      <ul>
+        <li>Verpflichtender Integrations‑ und Arbeitsplan: Sprachkurse mit Ziel B1 innerhalb von 3 Jahren. </li>
+        <li>Verbindliche Teilnahme an Arbeitsmarkt‑ oder Qualifizierungsprogrammen, gestaffelte Sanktionen bei Verweigerung. </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- WIRTSCHAFT -->
+  <section id="page-wirtschaft" class="page">
+    <div class="section-card">
+      <div class="section-meta">Wirtschaft & Finanzen</div>
+      <div class="section-grid">
+        <div>
+          <h1>Wirtschafts-, Finanz- und Industriepolitik</h1>
+          <h3>Ausgangslage</h3>
+          <ul>
+            <li>Phase wirtschaftlicher Stagnation, sinkende Industrieproduktion, Deindustrialisierungsrisiko. </li>
+            <li>Hohe Energiepreise, Handelskonflikte und geopolitische Unsicherheiten belasten das Exportmodell. </li>
+            <li>Schuldenbremse schafft nur dann Spielräume, wenn neue Kredite in rentable Investitionen fließen. </li>
+          </ul>
+        </div>
+        <div>
+          <img src="wirtschaft.jpg" alt="Symbolbild Wirtschaft und Industrie" class="topic-image">
+          <div class="stat-block">
+            Forschende warnen: Ohne starke Binnennachfrage, hohe öffentliche Investitionen und aktive
+            Industriepolitik droht dauerhafter Verlust von Strukturen und Fachkräften. 
+          </div>
+        </div>
+      </div>
+
+      <h2>Leitprinzipien der Wirtschaftspolitik</h2>
+      <h3>1. Investieren statt kaputtsparen</h3>
+      <ul>
+        <li>Hohe, zielgerichtete Investitionen in Infrastruktur, Bildung, Digitalisierung, Dekarbonisierung. </li>
+      </ul>
+
+      <h3>2. Industrieller Kern & Mittelstand</h3>
+      <ul>
+        <li>Fokus auf Schlüsselbranchen: Maschinenbau, Chemie, Automotive, Halbleiter, Batterien, Wasserstoff. </li>
+      </ul>
+
+      <h3>3. Arbeit & Investitionen belohnen</h3>
+      <ul>
+        <li>Entlastung niedriger und mittlerer Einkommen, weniger Bürokratie. </li>
+      </ul>
+
+      <h2>Konkrete Maßnahmen</h2>
+      <h3>1. Deutschlandfonds für Infrastruktur & Transformation</h3>
+      <ul>
+        <li>Volumen: mind. 150&nbsp;Mrd.&nbsp;Euro über zehn Jahre. </li>
+        <li>Finanzierung von Verkehrs‑/Schieneninfrastruktur, Strom‑ und Wasserstoffnetzen, Breitband, 5G/6G, Bildung, Forschung. </li>
+      </ul>
+
+      <h3>2. Steuerliche Entlastung</h3>
+      <ul>
+        <li>Anhebung des Grundfreibetrags um z.B. 1&nbsp;200&nbsp;Euro pro Jahr. </li>
+        <li>Abflachung der Progression im unteren und mittleren Einkommensbereich. </li>
+      </ul>
+
+      <h3>3. Industrie-Resilienz- und Transformationspakt</h3>
+      <ul>
+        <li>Förderprogramme für Halbleiter, Batteriezellen, Wasserstoff, klimafreundliche Industrie. </li>
+        <li>Kombination aus Zuschüssen, zinsgünstigen Krediten und staatlicher Kofinanzierung. </li>
+        <li>Koppelung an Standortgarantien, Ausbildungsquoten und Tarifbindung. </li>
+      </ul>
+
+      <h3>4. Soziale Balance</h3>
+      <ul>
+        <li>Gezielte Entlastung besonders belasteter Gruppen (Familien mit wenig Einkommen, Alleinerziehende).</li>
+        <li>Ausbau zielgerichteter Wohngeld‑ und Energiekosten‑Zuschüsse statt pauschaler Gießkannenhilfen. </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SOZIAL -->
+  <section id="page-sozial" class="page">
+    <div class="section-card">
+      <div class="section-meta">Soziales & Rente</div>
+      <div class="section-grid">
+        <div>
+          <h1>Sozialpolitik, Rente & Demografie</h1>
+          <h3>Demografischer Druck</h3>
+          <ul>
+            <li>Bis 2035: etwa jeder vierte Einwohner über 67 Jahre (aktuell etwa jeder Fünfte).</li>
+            <li>Altenquotient steigt v.a. im Osten, was das Rentensystem belastet. </li>
+            <li>Regionale Unterschiede: manche Regionen verlieren Einwohner, Großstädte wachsen. </li>
+          </ul>
+        </div>
+        <div>
+          <img src="sozial.jpg" alt="Symbolbild Soziales und Rente" class="topic-image">
+          <div class="stat-block">
+            Ohne höhere Erwerbstätigkeit von Frauen und Älteren sowie qualifizierte Zuwanderung verschärft
+            sich der Fachkräftemangel und gefährdet die Sozialsysteme. 
+          </div>
+        </div>
+      </div>
+
+      <h2>Leitprinzipien der Sozialpolitik</h2>
+      <h3>1. Generationenfairness</h3>
+      <ul>
+        <li>Stabiles Rentenniveau, ohne junge Generationen übermäßig zu belasten. </li>
+      </ul>
+
+      <h3>2. Arbeitsanreize statt Abhängigkeit</h3>
+      <ul>
+        <li>Transferleistungen so gestalten, dass sich Arbeit klar lohnt. </li>
+      </ul>
+
+      <h3>3. Familienfreundliche Gesellschaft</h3>
+      <ul>
+        <li>Gute Kinderbetreuung, finanzielle Unterstützung, bessere Vereinbarkeit von Familie und Beruf. </li>
+      </ul>
+
+      <h2>Konkrete Maßnahmen</h2>
+      <h3>1. Rentenstabilisierung mit Aktivkomponente</h3>
+      <ul>
+        <li>Ziel‑Rentenniveau um 48&nbsp;%, angelehnt an aktuelle Reformdebatten. </li>
+        <li>„Aktivmodell“: flexible Übergänge, z.B. Teilrente ab 63 bei langer Versicherungsdauer mit attraktiven Hinzuverdienstgrenzen. </li>
+        <li>Staatsnahe, kapitalgedeckte Fonds mit automatischer Einzahlung (Opt‑out). </li>
+      </ul>
+
+      <h3>2. Erwerbstätigkeit von Frauen & Älteren erhöhen</h3>
+      <ul>
+        <li>Rechtsanspruch auf hochwertige Kinderbetreuung ab dem zweiten Lebensjahr, bessere Kita‑Qualität. </li>
+        <li>Teilzeit‑plus‑Modelle und Weiterbildung für Ältere. </li>
+        <li>Ziel: Erwerbspersonenquote auf über 63,7&nbsp;% bis 2035 steigern bzw. Rückgang verhindern. </li>
+      </ul>
+
+      <h3>3. Familien- und Kinderförderung</h3>
+      <ul>
+        <li>Bündelung von Kindergeld, Kinderzuschlag etc. in einer transparenten Kindergrundsicherung. </li>
+        <li>Starke Anreizkomponente für Erwerbstätigkeit, Schwerpunkt auf niedrige und mittlere Einkommen. </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- KLIMA -->
+  <section id="page-klima" class="page">
+    <div class="section-card">
+      <div class="section-meta">Klima & Energie</div>
+      <div class="section-grid">
+        <div>
+          <h1>Klima-, Energie- und Umweltpolitik</h1>
+          <h3>Ausgangslage</h3>
+          <ul>
+            <li>EU‑Klimapolitik im Spannungsfeld: Emissionsreduktion vs. soziale Akzeptanz und Wettbewerbsfähigkeit. </li>
+            <li>Think‑Tanks betonen: Klimapolitik gelingt nur mit gesellschaftlicher Akzeptanz und Einbindung der Wirtschaft. </li>
+          </ul>
+        </div>
+        <div>
+          <img src="klima.jpg" alt="Symbolbild Klima und Energie" class="topic-image">
+          <div class="stat-block">
+            Transformation Richtung Klimaneutralität – insbesondere beim Wasserstoff – muss hoch bleiben
+            oder sogar beschleunigt werden. 
+          </div>
+        </div>
+      </div>
+
+      <h2>Leitprinzipien der Klimapolitik</h2>
+      <h3>1. Technologieoffenheit</h3>
+      <ul>
+        <li>Nutzung aller klimafreundlichen Technologien inkl. neuer Kernkraft‑Generation (SMR), wo sicher und wirtschaftlich. </li>
+      </ul>
+
+      <h3>2. Soziale Ausgewogenheit</h3>
+      <ul>
+        <li>Rückerstattung von CO₂‑Einnahmen an Bürger, zielgenaue Unterstützung für einkommensschwache Haushalte. </li>
+      </ul>
+
+      <h3>3. Industriekompatibilität</h3>
+      <ul>
+        <li>Klimapolitik so gestalten, dass der industrielle Kern erhalten und modernisiert wird. </li>
+      </ul>
+
+      <h2>Konkrete Maßnahmen</h2>
+      <h3>1. CO₂-Bepreisung mit Klimadividende</h3>
+      <ul>
+        <li>Fortführung und Anhebung der CO₂‑Preise im EU‑ETS und nationalen Emissionshandel für Verkehr/Wärme. </li>
+        <li>Großer Teil der Einnahmen als Pro‑Kopf‑Klimadividende zurück an Bürger. </li>
+      </ul>
+
+      <h3>2. Erneuerbare + Netze beschleunigen</h3>
+      <ul>
+        <li>Vereinfachte, digitalisierte Genehmigungen für Wind‑ und Solarprojekte. </li>
+        <li>Ausbau von Strom‑ und Wasserstoffnetzen mit Mitteln aus dem Deutschlandfonds. </li>
+      </ul>
+
+      <h3>3. Neue Kernenergie-Optionen prüfen</h3>
+      <ul>
+        <li>Prüfung/Pilotierung von SMR unter strengen Sicherheitsauflagen. </li>
+        <li>Einbettung in ein europäisches Sicherheits‑ und Entsorgungskonzept. </li>
+      </ul>
+
+      <h3>4. Industrie & Klima verbinden</h3>
+      <ul>
+        <li>Förderung von grünem Stahl, klimaneutraler Chemie etc. via Investitionszuschüsse und Carbon Contracts for Difference. </li>
+        <li>Ausbau von Verstärktem Recycling, um Resourcen und Energie zu sparen.</li>
+        <li>Nutzung von NextGenerationEU und EU‑Klimafonds zur Flankierung nationaler Maßnahmen. </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SICHERHEIT -->
+  <section id="page-sicherheit" class="page">
+    <div class="section-card">
+      <div class="section-meta">Innere Sicherheit & Verteidigung</div>
+      <div class="section-grid">
+        <div>
+          <h1>Sicherheit, innere Ordnung & Verteidigung</h1>
+          <h3>Gefühlte Unsicherheit</h3>
+          <ul>
+            <li>2015 sahen 63&nbsp;% die gesellschaftliche Stabilität als sicher, heute nur noch 26&nbsp;%; 
+		72&nbsp;% empfinden sie als unsicher. </li>
+            <li>Ukraine‑Krieg, Nahost‑Konflikte und Cyberangriffe verstärken das Sicherheitsbedürfnis. </li>
+          </ul>
+        </div>
+        <div>
+          <img src="sicherheit.jpg" alt="Symbolbild Sicherheit und Verteidigung" class="topic-image">
+          <div class="stat-block">
+            Ziel: starker Rechtsstaat mit gut ausgestatteter Polizei, wehrhafte Demokratie und
+            zuverlässige Einbindung in EU und NATO. 
+          </div>
+        </div>
+      </div>
+
+      <h2>Leitprinzipien der Sicherheitspolitik</h2>
+      <h3>1. Starker Rechtsstaat</h3>
+      <ul>
+        <li>Gut ausgestattete Polizei, konsequente Strafverfolgung, Prävention. </li>
+      </ul>
+
+      <h3>2. Wehrhafte Demokratie</h3>
+      <ul>
+        <li>Schutz vor Extremismus, Terrorismus und hybriden Bedrohungen. </li>
+      </ul>
+
+      <h3>3. Partnerschaftliche Sicherheit</h3>
+      <ul>
+        <li>Enge Einbindung in EU und NATO, gemeinsame Projekte. </li>
+      </ul>
+
+      <h2>Konkrete Maßnahmen</h2>
+      <h3>1. Polizei & Justiz stärken</h3>
+      <ul>
+        <li>Erhöhung der Zahl der Polizeivollzugsbeamten mit Fokus auf Brennpunkte und digitale Kriminalität. </li>
+        <li>Mehr Ressourcen für Staatsanwaltschaften und Gerichte zur Verfahrensbeschleunigung. </li>
+      </ul>
+
+      <h3>2. Cyber-Resilienz-Offensive</h3>
+      <ul>
+        <li>Nationales Cyber‑Sicherheitszentrum, Mindeststandards für IT‑Sicherheit in kritischen Infrastrukturen. </li>
+	<li>Verstärkt Schulungen & Prüfungen von Mitarbeiteren kritischer Unternehmen; zur Verbesserung des Faktor Mensch.</li>
+      </ul>
+
+      <h3>3. Verteidigung & NATO</h3>
+      <ul>
+        <li>Erfüllung und perspektivische Übererfüllung des 2‑Prozent‑Ziels bei Verteidigungsausgaben. </li>
+        <li>Mehr europäische Rüstungskooperationen und Standardisierung. </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- AUSSEN -->
+  <section id="page-aussen" class="page">
+    <div class="section-card">
+      <div class="section-meta">Außenpolitik & Europa</div>
+      <div class="section-grid">
+        <div>
+          <h1>Außenpolitik, Europa & globale Verantwortung</h1>
+          <h3>Geopolitischer Kontext</h3>
+          <ul>
+            <li>Russischer Angriffskrieg gegen die Ukraine, Unsicherheiten in der NATO, Rivalität mit China, Spannungen im Nahen Osten. </li>
+            <li>78&nbsp;% der Deutschen sehen die NATO durch die US‑Administration gefährdet. </li>
+          </ul>
+        </div>
+        <div>
+          <img src="aussen.jpg" alt="Symbolbild Außenpolitik und Europa" class="topic-image">
+          <div class="stat-block">
+            2026: AA‑Haushalt rund 6&nbsp;Mrd.&nbsp;Euro plus 12&nbsp;Mrd.&nbsp;Euro Mehrausgaben für Ukraine‑Unterstützung – dennoch
+            Eindruck mangelnder Handlungsfähigkeit. 
+          </div>
+        </div>
+      </div>
+
+      <h2>Leitprinzipien der Außenpolitik</h2>
+      <h3>1. Regelbasierte Ordnung</h3>
+      <ul>
+        <li>Schutz von UN, Völkerrecht und multilateralen Institutionen; klare Ablehnung von Angriffskriegen. </li>
+      </ul>
+
+      <h3>2. Europäische Souveränität</h3>
+      <ul>
+        <li>Aufbau europäischer Verteidigungsfähigkeit, digitale/technologische Unabhängigkeit, De‑Risking von China/Russland. </li>
+      </ul>
+
+      <h3>3. Transatlantische Partnerschaft mit Eigenständigkeit</h3>
+      <ul>
+        <li>Verlässliche NATO‑Mitgliedschaft, aber selbstbewusste Wahrnehmung europäischer Interessen. </li>
+      </ul>
+
+      <h3>4. Pragmatismus statt Moralismus</h3>
+      <ul>
+        <li>Klarer Blick auf Interessen bei gleichzeitiger Achtung von Rechtsstaatlichkeit und Menschenrechten. </li>
+      </ul>
+
+      <h2>Konkrete Maßnahmen (Auswahl)</h2>
+      <h3>A. Ukraine & Osteuropa</h3>
+      <ul>
+        <li>Mindestens 2,5&nbsp;Mrd.&nbsp;Euro pro Jahr für mind. 10 Jahre für militärische Ertüchtigung, Wiederaufbau und Flüchtlingshilfe. </li>
+        <li>Ausweitung der EU‑Sanktionen, Ausstieg aus russischem Öl/Gas bis 2027. </li>
+      </ul>
+
+      <h3>B. NATO & europäische Verteidigung</h3>
+      <ul>
+        <li>2&nbsp;%‑Ziel erreichen und perspektivisch auf ca. 2,5&nbsp;% (≈ 100&nbsp;Mrd.&nbsp;Euro) steigern. </li>
+        <li>Ausbau der Bundeswehr von ca. 182&nbsp;000 auf 250&nbsp;000–280&nbsp;000 Soldaten. Durch schaffen von Anreizen und Perspektiven. </li>
+        <li>Europäische Verteidigungsunion, gemeinsame Beschaffungen, Raketenabwehr‑Schutzschirm. </li>
+      </ul>
+
+      <h3>C. China & technologische Souveränität</h3>
+      <ul>
+        <li>Strategisches De‑Risking bei Seltenen Erden, Halbleitern, Batterien, Pharma, Chemikalien. </li>
+        <li>Investitionen von mind. 10&nbsp;Mrd.&nbsp;Euro in europäische Halbleiter‑, KI‑ und Quantenindustrie. </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- BILDUNG -->
+  <section id="page-bildung" class="page">
+    <div class="section-card">
+      <div class="section-meta">Bildung & Digitalisierung</div>
+      <div class="section-grid">
+        <div>
+          <h1>Bildung, Forschung & Digitalisierung</h1>
+          <h3>Ausgangslage</h3>
+          <ul>
+            <li>Fachkräftestrategie: fünf Felder – Ausbildung, Weiterbildung, Fachkräfteeinwanderung, Arbeitskultur, Mobilisierung inländischer Potenziale. </li>
+            <li>Nationale Weiterbildungsstrategie soll eine neue Weiterbildungskultur schaffen (Digitalisierung, KI, Klimawandel). </li>
+          </ul>
+        </div>
+        <div>
+          <img src="bildung.jpg" alt="Symbolbild Bildung und Digitalisierung" class="topic-image">
+        </div>
+      </div>
+
+      <h2>Leitprinzipien der Bildungs- & Digitalpolitik</h2>
+      <h3>1. Chancengleichheit & Exzellenz</h3>
+      <ul>
+        <li>Gute Bildung von der Kita bis zur Hochschule, starke berufliche Bildung. </li>
+      </ul>
+
+      <h3>2. Lebenslanges Lernen</h3>
+      <ul>
+        <li>Fortlaufende Weiterbildung als Standardantwort auf Strukturwandel. </li>
+      </ul>
+
+      <h3>3. Digitale Souveränität</h3>
+      <ul>
+        <li>Deutschland und Europa als wettbewerbsfähige Standorte für digitale Technologien. </li>
+      </ul>
+
+      <h2>Konkrete Maßnahmen</h2>
+      <h3>1. DigitalPakt Bildung 2.0</h3>
+      <ul>
+        <li>Fortsetzung und Ausbau der Investitionen in digitale Ausstattung (Geräte, Infrastruktur, Lernplattformen). </li>
+        <li>Verbindliche digitale Mindeststandards für Schulen und Prüfungen. </li>
+      </ul>
+
+      <h3>2. Berufliche Bildung & Weiterbildung</h3>
+      <ul>
+        <li>Ausbau dualer Ausbildungsgänge in Zukunftsbranchen. </li>
+        <li>Vereinfachte Förderinstrumente und zentrale Online‑Plattform für Weiterbildung, speziell für KMU. </li>
+      </ul>
+
+      <h3>3. Europäische Rolle</h3>
+      <ul>
+        <li>Aktive Mitgestaltung der EU‑Klima‑, Industrie‑ und Digitalpolitik. </li>
+        <li>Nutzung europäischer Programme (z.B. NextGenerationEU) zur Stärkung von Resilienz und Wettbewerbsfähigkeit. </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="page-quiz" class="page">
+    <div class="section-card">
+      <div class="section-meta">FOD‑Check</div>
+      <div class="section-grid">
+        <div>
+          <h1>FOD‑Check: Passt das Programm zu dir?</h1>
+          <p>
+            Der Test zeigt, wie stark deine Grundhaltungen mit dem FOD‑Programm übereinstimmen – ersetzt
+            aber keine eigene Lektüre oder Wahlentscheidung. 
+          </p>
+        </div>
+        <div>
+          <img src="quiz.jpg" alt="Symbolbild FOD‑Quiz" class="topic-image">
+        </div>
+      </div>
+
+      <div class="quiz-container">
+        <div class="quiz-meta">
+          Skala: 1 = lehne ich strikt ab, 7 = stimme ich voll zu. Einige Aussagen sind zugespitzt formuliert.
+        </div>
+
+        <div class="quiz-question">
+          <h3>1. Migration & Ordnung</h3>
+          <p>
+            Deutschland soll irreguläre Migration deutlich begrenzen, abgelehnte Asylbewerber zügig
+            zurückführen und zugleich qualifizierte Fachkräfte aktiv anwerben.
+          </p>
+          <div class="scale-labels"><span>1&nbsp;Ablehnung</span><span>7&nbsp;volle Zustimmung</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q1" value="1">1</label>
+            <label><input type="radio" name="q1" value="2">2</label>
+            <label><input type="radio" name="q1" value="3">3</label>
+            <label><input type="radio" name="q1" value="4">4</label>
+            <label><input type="radio" name="q1" value="5">5</label>
+            <label><input type="radio" name="q1" value="6">6</label>
+            <label><input type="radio" name="q1" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>2. Fachkräftezuwanderung</h3>
+          <p>
+            Ohne gesteuerte Zuwanderung von Fachkräften wird Deutschland Wohlstand und Sozialstaat
+            langfristig nicht sichern können.
+          </p>
+          <div class="scale-labels"><span>1</span><span>7</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q2" value="1">1</label>
+            <label><input type="radio" name="q2" value="2">2</label>
+            <label><input type="radio" name="q2" value="3">3</label>
+            <label><input type="radio" name="q2" value="4">4</label>
+            <label><input type="radio" name="q2" value="5">5</label>
+            <label><input type="radio" name="q2" value="6">6</label>
+            <label><input type="radio" name="q2" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>3. Klima & Industrie</h3>
+          <p>
+            Ambitionierter Klimaschutz ist nötig, darf aber nicht zur Deindustrialisierung führen; Politik
+            soll Emissionen senken und gleichzeitig Industriearbeitsplätze sichern.
+          </p>
+          <div class="scale-labels"><span>1</span><span>7</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q3" value="1">1</label>
+            <label><input type="radio" name="q3" value="2">2</label>
+            <label><input type="radio" name="q3" value="3">3</label>
+            <label><input type="radio" name="q3" value="4">4</label>
+            <label><input type="radio" name="q3" value="5">5</label>
+            <label><input type="radio" name="q3" value="6">6</label>
+            <label><input type="radio" name="q3" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>4. Energie & Klimaziele</h3>
+          <p>
+            Deutschland sollte alle Klimaziele fallen lassen und voll auf billige Kohle setzen; erneuerbare
+            Energien und moderne Kernenergie sind überflüssig.
+          </p>
+          <div class="scale-labels"><span>1&nbsp;lehne das klar ab</span><span>7&nbsp;stimme voll zu</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q4" value="1">1</label>
+            <label><input type="radio" name="q4" value="2">2</label>
+            <label><input type="radio" name="q4" value="3">3</label>
+            <label><input type="radio" name="q4" value="4">4</label>
+            <label><input type="radio" name="q4" value="5">5</label>
+            <label><input type="radio" name="q4" value="6">6</label>
+            <label><input type="radio" name="q4" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>5. Sozialstaat & Eigenverantwortung</h3>
+          <p>
+            Soziale Unterstützung ist wichtig, soll aber immer so gestaltet sein, dass sich Arbeit sehr klar
+            mehr lohnt als Nichtstun.
+          </p>
+          <div class="scale-labels"><span>1</span><span>7</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q5" value="1">1</label>
+            <label><input type="radio" name="q5" value="2">2</label>
+            <label><input type="radio" name="q5" value="3">3</label>
+            <label><input type="radio" name="q5" value="4">4</label>
+            <label><input type="radio" name="q5" value="5">5</label>
+            <label><input type="radio" name="q5" value="6">6</label>
+            <label><input type="radio" name="q5" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>6. NATO & USA</h3>
+          <p>
+            Deutschland soll die NATO ernst nehmen, das 2‑Prozent‑Ziel erfüllen und gleichzeitig seine
+            europäischen Interessen selbstbewusst vertreten.
+          </p>
+          <div class="scale-labels"><span>1</span><span>7</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q6" value="1">1</label>
+            <label><input type="radio" name="q6" value="2">2</label>
+            <label><input type="radio" name="q6" value="3">3</label>
+            <label><input type="radio" name="q6" value="4">4</label>
+            <label><input type="radio" name="q6" value="5">5</label>
+            <label><input type="radio" name="q6" value="6">6</label>
+            <label><input type="radio" name="q6" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>7. Haltung zu Extremen</h3>
+          <p>
+            Ich unterstütze Parteien nur dann, wenn sie entweder alle Grenzen abschaffen oder alle
+            internationalen Bündnisse sofort kündigen – Kompromisse lehne ich ab.
+          </p>
+          <div class="scale-labels"><span>1&nbsp;lehne das ab</span><span>7&nbsp;stimme voll zu</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q7" value="1">1</label>
+            <label><input type="radio" name="q7" value="2">2</label>
+            <label><input type="radio" name="q7" value="3">3</label>
+            <label><input type="radio" name="q7" value="4">4</label>
+            <label><input type="radio" name="q7" value="5">5</label>
+            <label><input type="radio" name="q7" value="6">6</label>
+            <label><input type="radio" name="q7" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>8. Evidenzbasierte Politik</h3>
+          <p>
+            Politische Entscheidungen sollen sich konsequent an Studien, Daten und realen Wirkungen
+            orientieren – nicht an reinen Symboldebatten.
+          </p>
+          <div class="scale-labels"><span>1</span><span>7</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q8" value="1">1</label>
+            <label><input type="radio" name="q8" value="2">2</label>
+            <label><input type="radio" name="q8" value="3">3</label>
+            <label><input type="radio" name="q8" value="4">4</label>
+            <label><input type="radio" name="q8" value="5">5</label>
+            <label><input type="radio" name="q8" value="6">6</label>
+            <label><input type="radio" name="q8" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>9. EU & Radikalität</h3>
+          <p>
+            Die beste Lösung für Deutschlands Probleme ist ein sofortiger Austritt aus der EU – oder eine
+            EU ohne nationale Parlamente
+          </p>
+          <div class="scale-labels"><span>1&nbsp;lehne das ab</span><span>7&nbsp;stimme voll zu</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q9" value="1">1</label>
+            <label><input type="radio" name="q9" value="2">2</label>
+            <label><input type="radio" name="q9" value="3">3</label>
+            <label><input type="radio" name="q9" value="4">4</label>
+            <label><input type="radio" name="q9" value="5">5</label>
+            <label><input type="radio" name="q9" value="6">6</label>
+            <label><input type="radio" name="q9" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>10. Ukraine & internationale Ordnung</h3>
+          <p>
+            Deutschland sollte die Ukraine militärisch und finanziell unterstützen, um eine regelbasierte
+            internationale Ordnung zu verteidigen.
+          </p>
+          <div class="scale-labels"><span>1</span><span>7</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q10" value="1">1</label>
+            <label><input type="radio" name="q10" value="2">2</label>
+            <label><input type="radio" name="q10" value="3">3</label>
+            <label><input type="radio" name="q10" value="4">4</label>
+            <label><input type="radio" name="q10" value="5">5</label>
+            <label><input type="radio" name="q10" value="6">6</label>
+            <label><input type="radio" name="q10" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>11. Staatsschulden & Investitionen</h3>
+          <p>
+            Der Staat soll mehr Schulden aufnehmen dürfen, wenn das Geld klar in langfristig
+            rentable Investitionen wie Infrastruktur, Digitalisierung und Bildung fließt.
+          </p>
+          <div class="scale-labels"><span>1</span><span>7</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q11" value="1">1</label>
+            <label><input type="radio" name="q11" value="2">2</label>
+            <label><input type="radio" name="q11" value="3">3</label>
+            <label><input type="radio" name="q11" value="4">4</label>
+            <label><input type="radio" name="q11" value="5">5</label>
+            <label><input type="radio" name="q11" value="6">6</label>
+            <label><input type="radio" name="q11" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>12. Familien & Kinder</h3>
+          <p>
+            Familien mit Kindern sollen stärker unterstützt werden als heute, auch wenn dafür
+            andere staatliche Ausgaben weniger stark wachsen können.
+          </p>
+          <div class="scale-labels"><span>1</span><span>7</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q12" value="1">1</label>
+            <label><input type="radio" name="q12" value="2">2</label>
+            <label><input type="radio" name="q12" value="3">3</label>
+            <label><input type="radio" name="q12" value="4">4</label>
+            <label><input type="radio" name="q12" value="5">5</label>
+            <label><input type="radio" name="q12" value="6">6</label>
+            <label><input type="radio" name="q12" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>13. Bürgerbeteiligung & direkte Demokratie</h3>
+          <p>
+            Bei großen Zukunftsfragen (z.B. Energie, EU‑Integration) soll es häufiger verbindliche
+            Volksentscheide auf Bundesebene geben.
+          </p>
+          <div class="scale-labels"><span>1</span><span>7</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q13" value="1">1</label>
+            <label><input type="radio" name="q13" value="2">2</label>
+            <label><input type="radio" name="q13" value="3">3</label>
+            <label><input type="radio" name="q13" value="4">4</label>
+            <label><input type="radio" name="q13" value="5">5</label>
+            <label><input type="radio" name="q13" value="6">6</label>
+            <label><input type="radio" name="q13" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>14. Strafen & Sicherheit</h3>
+          <p>
+            Für bestimmte Delikte (z.B. schwere Gewalt‑ und Sexualstraftaten) sollten Strafen
+            deutlich verschärft und Möglichkeiten zur Strafmilderung stark begrenzt werden.
+          </p>
+          <div class="scale-labels"><span>1</span><span>7</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q14" value="1">1</label>
+            <label><input type="radio" name="q14" value="2">2</label>
+            <label><input type="radio" name="q14" value="3">3</label>
+            <label><input type="radio" name="q14" value="4">4</label>
+            <label><input type="radio" name="q14" value="5">5</label>
+            <label><input type="radio" name="q14" value="6">6</label>
+            <label><input type="radio" name="q14" value="7">7</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>15. Umgang mit Kompromissen</h3>
+          <p>
+            Gute Politik bedeutet für mich, dass meine Lieblingsposition sich zu 100&nbsp;% durchsetzt –
+            Kompromisse mit anderen Ansichten halte ich grundsätzlich für falsch.
+          </p>
+          <div class="scale-labels"><span>1&nbsp;lehne das ab</span><span>7&nbsp;stimme voll zu</span></div>
+          <div class="scale-inputs">
+            <label><input type="radio" name="q15" value="1">1</label>
+            <label><input type="radio" name="q15" value="2">2</label>
+            <label><input type="radio" name="q15" value="3">3</label>
+            <label><input type="radio" name="q15" value="4">4</label>
+            <label><input type="radio" name="q15" value="5">5</label>
+            <label><input type="radio" name="q15" value="6">6</label>
+            <label><input type="radio" name="q15" value="7">7</label>
+          </div>
+        </div>
+
+        <button type="button" class="quiz-btn" onclick="auswerten()">Auswertung anzeigen</button>
+        <div id="result"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Fortschritt Deutschland (FOD) – fiktives Projekt zu Demonstrationszwecken.
+</footer>
+
+<script>
+  const navLinks = document.querySelectorAll('#main-nav a');
+  const mobileLinks = document.querySelectorAll('#mobile-nav a');
+  const pages = document.querySelectorAll('section.page');
+  const heroNavLinks = document.querySelectorAll('.nav-link');
+  const burger = document.getElementById('burger');
+  const mobileNav = document.getElementById('mobile-nav');
+  const logoLink = document.getElementById('logo-link');
+
+  function showPage(pageName) {
+    pages.forEach(p => {
+      p.classList.toggle('active', p.id === 'page-' + pageName);
+    });
+    [...navLinks, ...mobileLinks].forEach(a => {
+      a.classList.toggle('active', a.dataset.page === pageName);
+    });
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+
+  navLinks.forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      showPage(a.dataset.page);
+    });
+  });
+  mobileLinks.forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      showPage(a.dataset.page);
+      if (window.innerWidth <= 750) {
+        mobileNav.style.display = 'flex';
+      }
+    });
+  });
+  heroNavLinks.forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      showPage(a.dataset.page);
+    });
+  });
+  burger.addEventListener('click', () => {
+    const style = window.getComputedStyle(mobileNav);
+    mobileNav.style.display = (style.display === 'none' || style.display === '') ? 'flex' : 'none';
+  });
+  logoLink.addEventListener('click', () => {
+    showPage('start');
+  });
+
+  function auswerten() {
+    const positive = [1,2,3,5,6,8,10,11,12,13,14];
+    const reversed = [4,7,9,15];
+
+    let sum = 0;
+    let answered = 0;
+    let fangFehler = 0;
+
+    for (let i=1;i<=15;i++) {
+      const radios = document.querySelectorAll('input[name="q'+i+'"]');
+      let value = null;
+      radios.forEach(r => { if (r.checked) value = parseInt(r.value,10); });
+      if (value === null) continue;
+      answered++;
+
+      if (positive.includes(i)) {
+        sum += value;
+      } else if (reversed.includes(i)) {
+        sum += (8 - value);
+        if (value >= 5) fangFehler++;
+      }
+    }
+
+    const maxScore = 7 * 15;
+    const scorePercent = Math.round(sum / maxScore * 100);
+    let text = "";
+
+    if (answered < 10) {
+      text = "Bitte beantworte mindestens 10 Fragen, damit eine sinnvolle Auswertung möglich ist.";
+    } else if (scorePercent >= 80 && fangFehler === 0) {
+      text = "Sehr hohe programmatische Nähe: Deine Antworten liegen klar auf der Linie der FOD, und du hast zugespitzten Aussagen eher widersprochen. Das Programm dürfte gut zu dir passen.";
+    } else if (scorePercent >= 60 && fangFehler <= 1) {
+      text = "Grundsätzlich gute Passung: In vielen Kernfragen teilst du die Linie der FOD, bei einzelnen Punkten gibt es aber Unterschiede. Ein genauer Blick ins Programm lohnt sich.";
+    } else if (scorePercent >= 40) {
+      text = "Gemischtes Bild: Du teilst einige Positionen, bist mit anderen nicht einverstanden. Die FOD ist eher eine von mehreren Optionen für dich.";
+    } else {
+      text = "Geringe Nähe: Deine Antworten weichen in vielen Punkten vom Programm der FOD ab. Vermutlich passen andere Parteien besser zu deinen Überzeugungen.";
+    }
+
+    if (fangFehler >= 2) {
+      text += " Hinweis: Du hast mehreren sehr zugespitzten Aussagen deutlich zugestimmt – die FOD lehnt solche Extrempositionen bewusst ab.";
+    }
+
+    document.getElementById("result").innerHTML =
+      "<h2>Dein Ergebnis</h2>" +
+      "<p>Übereinstimmung mit der FOD (vereinfacht): <strong>" + scorePercent +
+      "%</strong>.</p><p>" + text + "</p>" +
+      "<small>Hinweis: Die Prozentzahl entsteht aus deinen Antworten auf 15 Fragen " +
+      "(Skala 1–7). Einige extrem zugespitzte Aussagen werden bei der Berechnung umgekehrt, " +
+      "damit Ablehnung solcher Positionen die Übereinstimmung mit der FOD erhöht.</small>";
+  }
+</script>
+</body>
+</html>
